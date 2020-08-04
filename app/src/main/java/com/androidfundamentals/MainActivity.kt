@@ -3,7 +3,10 @@ package com.androidfundamentals
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_view_pager.*
 import java.util.*
@@ -26,15 +29,25 @@ class MainActivity : AppCompatActivity() {
         val adapter = ViewPageAdapter(images)
         viewPager.adapter = adapter
 
-        //ESTE COMANDO PERMITE CAMBIAR LA DIRECCION DEL DESPLAZAMIENTO DE LAS IMAGENES
-        viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+        TabLayoutMediator(tabLayout,viewPager){ tab, position ->
+            tab.text = "Tab ${position + 1 }"
+        }.attach()
 
-        //deja q se inicie en cualquier imagen
-        viewPager.beginFakeDrag()
-        viewPager.fakeDragBy(-10f)
-        viewPager.endFakeDrag()
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity, "ReSelected ${tab?.text}", Toast.LENGTH_SHORT).show()
+            }
 
-}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity, "UnSelected ${tab?.text}", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity, "Selected ${tab?.text}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
 
 
 }
